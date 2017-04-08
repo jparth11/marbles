@@ -20,7 +20,7 @@ under the License.
 package main
 
 import (
-	//"errors"
+	"errors"
 	"fmt"
 	//"strconv"
 	//"encoding/json"
@@ -34,6 +34,11 @@ import (
 type SimpleChaincode struct {
 }
 
+type User struct{
+	Name string 
+	Id int 
+}
+
 type Marble struct{
 	ID string					//the fieldtags are needed to keep case from bouncing around
 	Color string 
@@ -41,10 +46,6 @@ type Marble struct{
 	cuser User 
 }
 
-type User struct{
-	Name string 
-	Id int 
-}
 // ============================================================================================================================
 // Main
 // ============================================================================================================================
@@ -60,22 +61,41 @@ func main() {
 // ============================================================================================================================
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	
+	var err error
+
+	err = stub.PutState("A", []byte("MarbleA"))
+	if err != nil{
+		return nil, errors.New("asd")
+	}
+
 	return nil, nil
 }
 
 // ============================================================================================================================
 // Invoke - Our entry point for Invocations
 // ============================================================================================================================
-func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
-	
-	return nil, nil
+func (t *SimpleChaincode) Invoke (stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
+	var err error
+
+	valAsbytes, err := stub.GetState("A")
+	if err != nil{
+		return nil, errors.New("asd")
+	}
+
+	return valAsbytes, nil
 }
 
 // ============================================================================================================================
 // Query - Our entry point for Queries
 // ============================================================================================================================
 func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
-	
-	return nil, nil
+	var err error
+
+	valAsbytes, err := stub.GetState("A")
+	if err != nil{
+		return nil, errors.New("asd")
+	}
+
+	return valAsbytes, nil
 }
 
