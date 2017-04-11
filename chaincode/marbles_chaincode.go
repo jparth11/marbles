@@ -22,8 +22,8 @@ package main
 import (
 	"errors"
 	"fmt"
-	//"strconv"
-	//"encoding/json"
+	"strconv"
+	"encoding/json"
 	//"time"
 	//"strings"
 
@@ -62,8 +62,12 @@ func main() {
 func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface, function string, args []string) ([]byte, error) {
 	
 	var err error
+	var MarbleA User
 
-	err = stub.PutState("A", []byte("MarbleA"))
+	MarbleA = User{"Parth", 125}
+	jsonAsBytes, _ := json.Marshal(MarbleA)
+
+	err = stub.PutState("A", jsonAsBytes)
 	if err != nil{
 		return nil, errors.New("asd")
 	}
@@ -78,11 +82,15 @@ func (t *SimpleChaincode) Invoke (stub shim.ChaincodeStubInterface, function str
 	var err error
 
 	valAsbytes, err := stub.GetState("A")
+
 	if err != nil{
 		return nil, errors.New("asd")
 	}
+	var marbleIndex User
+	json.Unmarshal(valAsbytes, &marbleIndex)	
+	marbleIndexReturn := []byte(strconv.Itoa(marbleIndex.Id))
 
-	return valAsbytes, nil
+	return marbleIndexReturn, nil
 }
 
 // ============================================================================================================================
@@ -92,10 +100,13 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	var err error
 
 	valAsbytes, err := stub.GetState("A")
+
 	if err != nil{
 		return nil, errors.New("asd")
 	}
+	var marbleIndex User
+	json.Unmarshal(valAsbytes, &marbleIndex)
+	marbleIndexReturn := []byte(strconv.Itoa(marbleIndex.Id))
 
-	return valAsbytes, nil
+	return marbleIndexReturn, nil
 }
-
