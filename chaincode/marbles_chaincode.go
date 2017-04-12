@@ -35,15 +35,15 @@ type SimpleChaincode struct {
 }
 
 type User struct{
-	Name string 
-	Id int 
+	Name string `json:"Name"`
+	Id int `json:"Id"`
 }
 
 type Marble struct{
-	ID string					//the fieldtags are needed to keep case from bouncing around
-	Color string 
-	Size int 
-	cuser User 
+	ID string `json:"ID"`
+	Color string `json:"Color"`
+	Size int `json:"Size"`
+	cuser User `json:"cuser"`
 }
 
 // ============================================================================================================================
@@ -89,6 +89,7 @@ func (t *SimpleChaincode) Invoke (stub shim.ChaincodeStubInterface, function str
 	var marbleIndex User
 	json.Unmarshal(valAsbytes, &marbleIndex)	
 	marbleIndexReturn := []byte(strconv.Itoa(marbleIndex.Id))
+	//marbleIndexReturn := []byte(marbleIndex.Id)
 
 	return marbleIndexReturn, nil
 }
@@ -107,6 +108,7 @@ func (t *SimpleChaincode) Query(stub shim.ChaincodeStubInterface, function strin
 	var marbleIndex User
 	json.Unmarshal(valAsbytes, &marbleIndex)
 	marbleIndexReturn := []byte(strconv.Itoa(marbleIndex.Id))
+	//marbleIndexReturn := []byte(marbleIndex.Id)
 
 	return marbleIndexReturn, nil
 }
